@@ -1,4 +1,4 @@
-const host = "http://95.154.66.166:3000";
+const host = "https://4e21-95-154-66-166.ngrok.io";
 let tonweb
 const nfts = [
     "EQDn_tr_4mK2MQViQc2_K9OHKfSvSRdX__bxj_RjY5y-MiJ_",
