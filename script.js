@@ -1,4 +1,4 @@
-const host = "https://87f3-95-154-66-166.ngrok-free.app";
+const host = "http://localhost:3000";
 let tonweb
 const nfts = [
     "EQDn_tr_4mK2MQViQc2_K9OHKfSvSRdX__bxj_RjY5y-MiJ_",
