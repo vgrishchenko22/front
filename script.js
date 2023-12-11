@@ -1,4 +1,4 @@
-const host = "http://localhost:3000";
+const host = "http://95.154.66.166:3000";
 let tonweb
 const nfts = [
     "EQDn_tr_4mK2MQViQc2_K9OHKfSvSRdX__bxj_RjY5y-MiJ_",
@@ -83,30 +83,21 @@ document.addEventListener("DOMContentLoaded", async function () {
     .then(async (endpoint) => {
         tonweb = await new window.TonWeb(await new window.TonWeb.HttpProvider(endpoint));
 
-        console.log("hgfc");
-
         async function getPlace(url) {
             const response = await fetch(url, {
                 method: "GET",
-                headers: {
-                    "Content-Type": "application/json",
-                    "Access-Control-Allow-Origin": "*",
-                },
             });
             return await response.json();
         };
 
         await getPlace(`${host}/table/1`).then(async data => {
-            console.log("as");
             let i = 1;
             for await (const iterator of data) {
                 if (iterator != null) {
                     document.getElementById(`div-1${i}`).innerHTML = `<img src=${nftsWithImg[iterator]}>`;
-                    console.log(iterator);
                 }
 
                 i++
-                console.log(i);
             }
         });
         await getPlace(`${host}/table/2`).then(async data => {
@@ -135,15 +126,6 @@ tonConnectUI.onStatusChange(async w => {
     console.log(w);
     localStorage.setItem("wallet", (await new window.TonWeb.utils.Address(await w.account.address)).toString(true, true, true));
     setTimeout(async () => {
-        const nftItem = new window.TonWeb.token.nft.NftItem(tonweb.provider, {address: iterator});
-    
-        const data = await nftItem.methods.getData(nftItem);
-
-        data.itemIndex = data.itemIndex.toString();
-        data.collectionAddress = data.collectionAddress.toString(true, true, true);
-        data.ownerAddress = data.ownerAddress?.toString(true, true, true);
-        
-        console.log(data);
         if (!localStorage.nft) {
             for await (const iterator of nfts) {
                 try {
@@ -157,7 +139,10 @@ tonConnectUI.onStatusChange(async w => {
                     
                     console.log(data);
 
-                    localStorage.setItem("nft", iterator)
+                    if (localStorage.wallet == data.ownerAddress) {
+                        localStorage.setItem("nft", iterator);
+                        break
+                    }
                 } catch (e) {
                     console.error(e);
                 }
@@ -168,11 +153,11 @@ tonConnectUI.onStatusChange(async w => {
     }, 2000);
 });
 
-function getRandomNum(min, max) {
-    min = Math.ceil(min);
-    max = Math.floor(max);
-    return Math.floor(Math.random() * (max - min + 1)) + min;
-}
+// function getRandomNum(min, max) {
+//     min = Math.ceil(min);
+//     max = Math.floor(max);
+//     return Math.floor(Math.random() * (max - min + 1)) + min;
+// }
 
 // document.getElementById("div-11").addEventListener("click", function () {
 //     this.innerHTML = `<img src="https://raw.githubusercontent.com/vgrishchenko22/c/main/images-${getRandomNum(1, 4)}/${getRandomNum(1, 9)}.jpg">`;
@@ -231,30 +216,39 @@ document.getElementById("div-19").addEventListener("click", async function () {
     postData(`${host}/table/1`, { square: 8, nft: localStorage.getItem("nft") });
 });
 
-// document.getElementById("div-21").addEventListener("click", function () {
-//     postData(`${host}/table/2`, { square: 0, nft: localStorage.getItem("nft") }).then((data) => {});
-// });
-// document.getElementById("div-22").addEventListener("click", function () {
-//     postData(`${host}/table/2`, { square: 1, nft: localStorage.getItem("nft") }).then((data) => {});
-// });
-// document.getElementById("div-23").addEventListener("click", function () {
-//     postData(`${host}/table/2`, { square: 2, nft: localStorage.getItem("nft") }).then((data) => {});
-// });
-// document.getElementById("div-24").addEventListener("click", function () {
-//     postData(`${host}/table/2`, { square: 3, nft: localStorage.getItem("nft") }).then((data) => {});
-// });
-// document.getElementById("div-25").addEventListener("click", function () {
-//     postData(`${host}/table/2`, { square: 4, nft: localStorage.getItem("nft") }).then((data) => {});
-// });
-// document.getElementById("div-26").addEventListener("click", function () {
-//     postData(`${host}/table/2`, { square: 5, nft: localStorage.getItem("nft") }).then((data) => {});
-// });
-// document.getElementById("div-27").addEventListener("click", function () {
-//     postData(`${host}/table/2`, { square: 6, nft: localStorage.getItem("nft") }).then((data) => {});
-// });
-// document.getElementById("div-28").addEventListener("click", function () {
-//     postData(`${host}/table/2`, { square: 7, nft: localStorage.getItem("nft") }).then((data) => {});
-// });
-// document.getElementById("div-29").addEventListener("click", function () {
-//     postData(`${host}/table/2`, { square: 8, nft: localStorage.getItem("nft") }).then((data) => {});
-// });
+document.getElementById("div-21").addEventListener("click", async function () {
+    this.innerHTML = `<img src="${await nftsWithImg[localStorage.getItem("nft")]}">`;
+    postData(`${host}/table/2`, { square: 0, nft: localStorage.getItem("nft") });
+});
+document.getElementById("div-22").addEventListener("click", async function () {
+    this.innerHTML = `<img src="${await nftsWithImg[localStorage.getItem("nft")]}">`;
+    postData(`${host}/table/2`, { square: 1, nft: localStorage.getItem("nft") });
+});
+document.getElementById("div-23").addEventListener("click", async function () {
+    this.innerHTML = `<img src="${await nftsWithImg[localStorage.getItem("nft")]}">`;
+    postData(`${host}/table/2`, { square: 2, nft: localStorage.getItem("nft") });
+});
+document.getElementById("div-24").addEventListener("click", async function () {
+    this.innerHTML = `<img src="${await nftsWithImg[localStorage.getItem("nft")]}">`;
+    postData(`${host}/table/2`, { square: 3, nft: localStorage.getItem("nft") });
+});
+document.getElementById("div-25").addEventListener("click", async function () {
+    this.innerHTML = `<img src="${await nftsWithImg[localStorage.getItem("nft")]}">`;
+    postData(`${host}/table/2`, { square: 4, nft: localStorage.getItem("nft") });
+});
+document.getElementById("div-26").addEventListener("click", async function () {
+    this.innerHTML = `<img src="${await nftsWithImg[localStorage.getItem("nft")]}">`;
+    postData(`${host}/table/2`, { square: 5, nft: localStorage.getItem("nft") });
+});
+document.getElementById("div-27").addEventListener("click", async function () {
+    this.innerHTML = `<img src="${await nftsWithImg[localStorage.getItem("nft")]}">`;
+    postData(`${host}/table/2`, { square: 6, nft: localStorage.getItem("nft") });
+});
+document.getElementById("div-28").addEventListener("click", async function () {
+    this.innerHTML = `<img src="${await nftsWithImg[localStorage.getItem("nft")]}">`;
+    postData(`${host}/table/2`, { square: 7, nft: localStorage.getItem("nft") });
+});
+document.getElementById("div-29").addEventListener("click", async function () {
+    this.innerHTML = `<img src="${await nftsWithImg[localStorage.getItem("nft")]}">`;
+    postData(`${host}/table/2`, { square: 8, nft: localStorage.getItem("nft") });
+});
